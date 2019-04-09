@@ -171,9 +171,9 @@ TABLE1
 
 ####Table 1 from Study
 
-```{r image1}
-img src="img/Table 1.PNG" width="200px"
-```
+
+<img src="img/Table 1.PNG" width="200px"/>
+
 
 
 
