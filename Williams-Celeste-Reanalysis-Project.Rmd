@@ -175,10 +175,12 @@ kable(TABLE1)
 ####Table 1 from Study
 
 
+![](img/Table 1.PNG)
 
-<img src=img/Table 1.PNG width=200px/>
+
 
 A few discrepancies can be found when comparing my replication to the one in the study. First,for the Subhumid forest measures, the authors and I came up with the same values for rPRI, rCAR, rAFR, rROD, and rTLNP, but different means. Second, for rTLNP Bemaraha I came up with 9 and they with 11, and with rTLNP Kirindy CFPF I came up with 12 and they 13. However, I continued to use the values I came up with throughout this project, and came up with the same results. Lastly, for rPRI Tsimanampetsotsa I reported 5 from the dataset, and they reported 4; for Andohahela Parcel 2 I reported 6 and they reported 7; for Ankarafantsika I reported 9 and they reported 8. I went back to the dataset and am still not sure how they came up with those values. Further in the report, you will see where I did have to change my values to the ones they reported in the study in order to get the appropriate statistical analyses run and figures made.
+
 
 ***Ambohijanahary was included in the datasets, but was never used in the analyses
 
@@ -240,7 +242,7 @@ run_model("rAFR", c("ecoregion"), c("rPRI"), dataset = df)
 run_model("rROD", c("ecoregion"), c("rPRI"), dataset = df)
 ```
 
-
+These reanalyses did not produce the same results as the study. when looking at ecoregion alone as the predictor variable, the results came out good. However, when the regression was run with both ecoregion and rPRI, the statistical values weren't matching. I then realized it was likely the discrepancy I discussed earlier with the author and I having different rPRI values for Tsimanampetsotsa, Andohahela Parcel 2, and Ankarafantsika. I address this issue below.
 
 ###TABLE 2 Redone With rPRI numbers used by authors
 
@@ -320,7 +322,8 @@ TABLE2
 kable(TABLE2)
 ```
 
-IMAGE OF STUDY TABLE
+###Table 2 from study
+![](img/Table 2.png)
 
 
 There was one slight discrepancy when comparing my replicated Table 2 to their Table 2. If you look at rCAR Block 2 DeltaF, you will see my reanalysis statistic was 8.0542 and there statistic was 8.504.
@@ -399,7 +402,6 @@ After looking at the Figures, I found that Figure 2a was still not what the auth
 ####REDOING FIGURE 2 to include Analevelona data in Fig 2a (TLNP vs Primate)
 ```{r Ana add for fig2a, echo=FALSE}
 Figure2_values<- TABLE1
-Figure2_values
 df_figure<- as.data.frame(Figure2_values)
 df_figure<-df_figure[-c(6,11,17,25,39),]
 df_figure<- cbind(df_figure, ecoregion=c("Spiny Thicket","Spiny Thicket","Spiny Thicket","Spiny Thicket","Spiny Thicket","Succulent Woodland","Succulent Woodland","Succulent Woodland","Succulent Woodland","Dry Deciduous Forest","Dry Deciduous Forest","Dry Deciduous Forest","Dry Deciduous Forest","Dry Deciduous Forest","Humid Forest","Humid Forest","Humid Forest","Humid Forest","Humid Forest","Humid Forest","Humid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest"))
@@ -427,5 +429,42 @@ avPlots(lm(rROD ~ ecoregion+rPRI ,data=df_figure),grid=FALSE,id=FALSE, terms = "
 text(-6,6,labels = "d")
 ```
 
+###Figure 2 from Study
+![](img/Figure 2.PNG)
 
-Image figure 2
+
+
+
+
+
+
+#### Here are some bigger versions of the four graphs I replicated above for better reference
+```{r Ana add for fig2a final, echo=FALSE}
+Figure2_values<- TABLE1
+df_figure<- as.data.frame(Figure2_values)
+df_figure<-df_figure[-c(6,11,17,25,39),]
+df_figure<- cbind(df_figure, ecoregion=c("Spiny Thicket","Spiny Thicket","Spiny Thicket","Spiny Thicket","Spiny Thicket","Succulent Woodland","Succulent Woodland","Succulent Woodland","Succulent Woodland","Dry Deciduous Forest","Dry Deciduous Forest","Dry Deciduous Forest","Dry Deciduous Forest","Dry Deciduous Forest","Humid Forest","Humid Forest","Humid Forest","Humid Forest","Humid Forest","Humid Forest","Humid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest"))
+df_figure[1,1]<-4
+df_figure[4,1]<-7
+df_figure[11,1]<-8
+```
+
+```{r individual fig2a, echo=FALSE}
+avPlots(lm(rTLNP ~ ecoregion+rPRI ,data=df_figure),grid=FALSE,id=FALSE, terms = "rPRI",xlab="Primate Species Richness",ylab="TLNP Species Richness",ylim=c(-20,10), xlim=c(-6,4))
+text(-6,9,labels = "a")
+```
+```{r omit Analevelona, echo=FALSE}
+df_figure<-df_figure[-c(34),] #I am now omitting Analevelona in order to put together a final Figure 2 with each graph as it appears in the study
+```
+```{r individual Fig2b, echo=FALSE}
+avPlots(lm(rCAR ~ ecoregion+rPRI ,data=df_figure),grid=FALSE,id=FALSE, terms = "rPRI",xlab="Primate Species Richness",ylab="Carnivoran Species Richness",ylim=c(-3,2), xlim=c(-6,4))
+text(-6,2,labels = "b")
+```
+```{r individual Fig2c, echo=FALSE}
+avPlots(lm(rAFR ~ ecoregion+rPRI ,data=df_figure),grid=FALSE,id=FALSE, terms = "rPRI",xlab="Primate Species Richness",ylab="Afrosoricid Species Richness",ylim=c(-6,4), xlim=c(-6,4))
+text(-6,4,labels = "c")
+```
+```{r individual Fig2d, echo=FALSE}
+avPlots(lm(rROD ~ ecoregion+rPRI ,data=df_figure),grid=FALSE,id=FALSE, terms = "rPRI",xlab="Primate Species Richness",ylab="Rodent Species Richness",ylim=c(-6,6), xlim=c(-6,4))
+text(-6,6,labels = "d")
+```
