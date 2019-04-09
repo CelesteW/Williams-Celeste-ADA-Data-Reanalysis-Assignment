@@ -23,11 +23,11 @@ knitr::opts_chunk$set(
 
 ## Introduction
 
-[Include a summary of the paper you are reanalyzing data from]
+This paper aims to show how affective a more widely studied species like Primates can predict other mammal species' richness. Based in Madagascar, this study used lemurs as its predictor and aimed to show how well they could predict the richness of mammals suchs as rodents, carnivores, and afrosoricids. They concluded that primate species richness was a good predictor for carnivores and rodents after habitat was controlled for. This study is important for gaining information about lesser studied species and the general biodiversity that exists in environments. 
 
 ## Visualization of Data
 
-[Include a view of the first few lines of the data set plus exploratory data analysis - overview of descriptive statistics included in the paper, plots, etc.
+This study performed various statistical analyses. For the descriptive statistical analysis I replicated Table 1 where the mean was found for each species group (PRI-Primate, CAR-Carnivore, AFR-Afrosoricid, ROD-Rodent, TLNP-Total non-primate) in the 5 different ecoregions (Spiny Thicket, Succulent Woodland, Dry Deciduous Forest, Humid Forest, Subhumid Forest) from "Table A". For the inferential statistical analysis I replicated Table 2 where a Multiple Linear Regression was performed to determine how well the species richness of Primates could predict other species richness. In this linear regression, the other predictor variable was ecoregion, a categorical variable, which had to be dummy-coded. For the visualization I replicated Figure 2, including 4 partial regression plots of species richness on primate species richness. 
 
 ```{r fileA}
 library(readxl)
@@ -38,8 +38,11 @@ head(A)
 
 ## Replications/Reanalysis
 
-The first analyses to be done was replicating Table 1:Species richness (r) and complementarity (c) per mammal community
-```{r library}
+### Table 1 Reanalysis- Descriptive Statistical Analysis
+
+The first analyses to be done was replicating the species richness data in Table 1
+
+```{r library, echo=FALSE}
 library(tidyr)
 library(tidyverse)
 library(dplyr)
@@ -48,7 +51,7 @@ library(knitr)
 library(formatR)
 ```
 
-#####Spiny Thicket
+#####*SPINY THICKET*
 ```{r Table_1_spiny}
 rPRI<- A[1:73,c(8:11,36)]
 rPRI<-colSums(rPRI)
@@ -71,7 +74,7 @@ SP<- rbind(SP,mean_spiny_thicket)
 SP<- rbind(SP)
 ```
 
-#####SUCCULENT WOODLAND
+#####*SUCCULENT WOODLAND*
 ```{r Table_1_succ}
 rPRI<- A[1:73,c(6:7,33:34)]
 rPRI<-colSums(rPRI)
@@ -94,7 +97,7 @@ SUC<- rbind(SUC,mean_succulent_woodland)
 TABLE1<- rbind(SP,SUC)
 ```
 
-#####DRY DECIDUOUS FOREST
+#####*DRY DECIDUOUS FOREST*
 ```{r Table_1_dry}
 rPRI<- A[1:73,c(2:5,31)]
 rPRI<-colSums(rPRI)
@@ -117,7 +120,7 @@ DRY<- rbind(DRY,mean_dry_deciduous_forest)
 TABLE1<-rbind(SP,SUC,DRY)
 ```
 
-#####HUMID FOREST
+#####*HUMID FOREST*
 ```{r Table_1_humid}
 rPRI<- A[1:73,c(24:30)]
 rPRI<-colSums(rPRI)
@@ -140,7 +143,7 @@ HUM<- rbind(HUM,mean_humid_forest)
 TABLE1<- rbind(SP,SUC,DRY,HUM)
 ```
 
-#####SUBHUMID FOREST
+#####*SUBHUMID FOREST*
 ```{r Table_1_subhumid}
 rPRI<- A[1:73,c(12:23,35)]
 rPRI<-colSums(rPRI)
@@ -165,22 +168,264 @@ TABLE1<-as.data.frame(TABLE1)
 ```
 
 ####Final Table 1
-```{r Table_1_final}
-TABLE1
+```{r echo=FALSE, results='asis'}
+kable(TABLE1)
 ```
 
 ####Table 1 from Study
 
 
-<img src="img/Table 1.PNG" width="200px"/>
+
+<img src=img/Table 1.PNG width=200px/>
+
+A few discrepancies can be found when comparing my replication to the one in the study. First,for the Subhumid forest measures, the authors and I came up with the same values for rPRI, rCAR, rAFR, rROD, and rTLNP, but different means. Second, for rTLNP Bemaraha I came up with 9 and they with 11, and with rTLNP Kirindy CFPF I came up with 12 and they 13. However, I continued to use the values I came up with throughout this project, and came up with the same results. Lastly, for rPRI Tsimanampetsotsa I reported 5 from the dataset, and they reported 4; for Andohahela Parcel 2 I reported 6 and they reported 7; for Ankarafantsika I reported 9 and they reported 8. I went back to the dataset and am still not sure how they came up with those values. Further in the report, you will see where I did have to change my values to the ones they reported in the study in order to get the appropriate statistical analyses run and figures made.
+
+***Ambohijanahary was included in the datasets, but was never used in the analyses
+
+###Table 2 Reanalysis- Inferential statistical analysis
+
+```{r lib table 2}
+library(car)
+library(tidyverse)
+```
+
+```{r fixing table for next analy}
+Table2<- TABLE1
+Table2
+df<- as.data.frame(Table2)
+is.data.frame(df)
+df<-df[-c(6,11,17,25,39),]
+```
+
+#####*DUMMY CODING ECOREGION*
+```{r dummy code ecoregion}
+df<- cbind(df, ecoregion=c("Spiny Thicket","Spiny Thicket","Spiny Thicket","Spiny Thicket","Spiny Thicket","Succulent Woodland","Succulent Woodland","Succulent Woodland","Succulent Woodland","Dry Deciduous Forest","Dry Deciduous Forest","Dry Deciduous Forest","Dry Deciduous Forest","Dry Deciduous Forest","Humid Forest","Humid Forest","Humid Forest","Humid Forest","Humid Forest","Humid Forest","Humid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest"))
+df
+str(df$ecoregion)
+```
+
+#####*FINDING AND REMOVING THOSE WHERE Di > 4/n (4/34)*
+
+The authors stated that "we removed outliers from the analysis if Di > 4 / n, where n = 34". Analevelona (row 34) was the only one to fit this, which can be seen in the Cook's Distance test below. The authors also stated later in the results that "for the remaining analyses, we removed this community [Analevelona] from our sample".
+
+```{r cooks dist}
+library(olsrr)
+m<-lm(data=df,rTLNP ~ ecoregion + rPRI)
+ols_plot_cooksd_chart(m)
+df<-df[-c(34),] #removing Analevelona
+```
+
+
+```{r table lib for modeling }
+library(AutoModel)
+```
+
+#####*TLNP vs. PRI*
+```{r model 1}
+run_model("rTLNP", c("ecoregion"), c("rPRI"), dataset = df)
+```
+
+#####*CAR vs PRI*
+```{r model 2}
+run_model("rCAR", c("ecoregion"), c("rPRI"), dataset = df)
+```
+
+#####*AFR vs PRI*
+```{r model 3}
+run_model("rAFR", c("ecoregion"), c("rPRI"), dataset = df)
+```
+
+#####*ROD vs PRI*
+```{r model 4}
+run_model("rROD", c("ecoregion"), c("rPRI"), dataset = df)
+```
 
 
 
+###TABLE 2 Redone With rPRI numbers used by authors
+
+This is where I have had to change my rPRI numbers to match their in order to get the appropriate summary reports/ statistics. I have done some steps over again to ensure I didn't mess up my data frame (i.e. remove rows that were mean values, dummy code ecoregion, perform Cook's Distance, and remove Analavelona from analysis), but I did not have these echoed, as I have run them a couple of times already.
+
+```{r retry, echo=FALSE}
+TABLE2<- TABLE1
+TABLE2
+df<- as.data.frame(TABLE2)
+is.data.frame(df)
+df<-df[-c(6,11,17,25,39),]
+
+#####*DUMMY CODING ECOREGION*
+
+df<- cbind(df, ecoregion=c("Spiny Thicket","Spiny Thicket","Spiny Thicket","Spiny Thicket","Spiny Thicket","Succulent Woodland","Succulent Woodland","Succulent Woodland","Succulent Woodland","Dry Deciduous Forest","Dry Deciduous Forest","Dry Deciduous Forest","Dry Deciduous Forest","Dry Deciduous Forest","Humid Forest","Humid Forest","Humid Forest","Humid Forest","Humid Forest","Humid Forest","Humid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest"))
+df
+str(df$ecoregion)
+
+#####*FINDING AND REMOVING THOSE WHERE Di > 4/n (4/34): "We removed outliers from the analysis if Di > 4 / n, where n = 34 (i.e., the number of mammal communities,"*
+
+m<-lm(data=df,rTLNP ~ ecoregion + rPRI)
+ols_plot_cooksd_chart(m)
+df<-df[-c(34),]
+
+#####*REMOVE ANALAVELONA FROM ANALYSIS*
+```
+
+#####*INSERTING VALUES WE HAD THAT WERE DIFFERENT*
+
+```{r rPRI values}
+df[1,1]<-4
+df[4,1]<-7
+df[11,1]<-8
+df
+```
+
+#####*TLNP vs PRI*
+```{r retry model 1}
+rTLNP_STATS<-run_model("rTLNP", c("ecoregion"), c("rPRI"), dataset = df)
+rTLNP_STATS<-rTLNP_STATS$SummaryDF
+```
+
+#####*CAR vs PRI*
+```{r retry model 2}
+rCAR_STATS<-run_model("rCAR", c("ecoregion"), c("rPRI"), dataset = df)
+rCAR_STATS<-rCAR_STATS$SummaryDF
+```
+
+#####*AFR vs PRI*
+```{r retry model 3}
+rAFR_STATS<-run_model("rAFR", c("ecoregion"), c("rPRI"), dataset = df)
+rAFR_STATS<-rAFR_STATS$SummaryDF
+```
+
+#####*ROD vs PRI*
+```{r retry mdel 4}
+rROD_STATS<- run_model("rROD", c("ecoregion"), c("rPRI"), dataset = df)
+rROD_STATS<-rROD_STATS$SummaryDF
+```
+
+####MAKING FINAL VERION OF TABLE 2
+```{r finalTable2}
+rTLNP_STATS<- rTLNP_STATS[,c("R2","SE","DeltaR2","Fch","DF1","DF2","pval")]
+rCAR_STATS<- rCAR_STATS[,c("R2","SE","DeltaR2","Fch","DF1","DF2","pval")]
+rAFR_STATS<- rAFR_STATS[,c("R2","SE","DeltaR2","Fch","DF1","DF2","pval")]
+rROD_STATS<- rROD_STATS[,c("R2","SE","DeltaR2","Fch","DF1","DF2","pval")]
+TABLE2<- rbind(rTLNP_STATS,rCAR_STATS,rAFR_STATS,rROD_STATS)
+row.names(TABLE2)<- c("rTLNP","  ","rCAR","   ","rAFR","    ","rROD","     ")
+TABLE2<- cbind(TABLE2, Block=c("1","2","1","2","1","2","1","2"))
+TABLE2<-TABLE2[c(8,1,2,3,4,5,6,7)]
+colnames(TABLE2)[5]<- "DeltaF"
+TABLE2
+```
+
+###Final Table 2
+```{r echo=FALSE, results='asis'}
+kable(TABLE2)
+```
+
+IMAGE OF STUDY TABLE
+
+
+There was one slight discrepancy when comparing my replicated Table 2 to their Table 2. If you look at rCAR Block 2 DeltaF, you will see my reanalysis statistic was 8.0542 and there statistic was 8.504.
 
 
 
+###FIGURE 2- Visualization
+
+Even though the Multiple Regression Analysis has been run with the rPRI values the authors used, I still wanted to make Partial Regression Plots of the data I replicated. In the section following I will adjust the values back to the ones the authors used for rPRI
+
+```{r fig 2 with my data}
+TABLE2<- TABLE1
+TABLE2
+df_figure<- as.data.frame(TABLE2)
+is.data.frame(df_figure)
+df_figure<-df_figure[-c(6,11,17,25,39),]
+df_figure<- cbind(df_figure, ecoregion=c("Spiny Thicket","Spiny Thicket","Spiny Thicket","Spiny Thicket","Spiny Thicket","Succulent Woodland","Succulent Woodland","Succulent Woodland","Succulent Woodland","Dry Deciduous Forest","Dry Deciduous Forest","Dry Deciduous Forest","Dry Deciduous Forest","Dry Deciduous Forest","Humid Forest","Humid Forest","Humid Forest","Humid Forest","Humid Forest","Humid Forest","Humid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest"))
+df_figure
+df_figure<-df_figure[-c(34),]
+```
+
+#####*Fig2a*
+```{r fig2a}
+avPlots(lm(rTLNP ~ ecoregion+rPRI ,data=df_figure),grid=FALSE,id=FALSE, terms = "rPRI")
+```
+
+#####*Fig2b*
+```{r fig2b}
+avPlots(lm(rCAR ~ ecoregion+rPRI ,data=df_figure),grid=FALSE,id=FALSE, terms = "rPRI")
+```
+
+#####*Fig2c*
+```{r fig2c}
+avPlots(lm(rAFR ~ ecoregion+rPRI ,data=df_figure),grid=FALSE,id=FALSE, terms = "rPRI")
+```
+
+#####*Fig2d*
+```{r fig2d}
+avPlots(lm(rROD ~ ecoregion+rPRI ,data=df_figure),grid=FALSE,id=FALSE, terms = "rPRI")
+```
 
 
+##Figure 2 Reanalysis with adjusted rPRI values
+
+```{r author val}
+Figure2_values<- TABLE1
+Figure2_values
+df_figure<- as.data.frame(Figure2_values)
+df_figure<-df_figure[-c(6,11,17,25,39),]
+df_figure<- cbind(df_figure, ecoregion=c("Spiny Thicket","Spiny Thicket","Spiny Thicket","Spiny Thicket","Spiny Thicket","Succulent Woodland","Succulent Woodland","Succulent Woodland","Succulent Woodland","Dry Deciduous Forest","Dry Deciduous Forest","Dry Deciduous Forest","Dry Deciduous Forest","Dry Deciduous Forest","Humid Forest","Humid Forest","Humid Forest","Humid Forest","Humid Forest","Humid Forest","Humid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest"))
+df_figure<-df_figure[-c(34),]
+df_figure[1,1]<-4
+df_figure[4,1]<-7
+df_figure[11,1]<-8
+df_figure
+```
+
+#####*Fig2a*
+```{r auth fig2a}
+par(mfrow=c(2,2))
+avPlots(lm(rTLNP ~ ecoregion+rPRI ,data=df_figure),grid=FALSE,id=FALSE, terms = "rPRI",xlab="Primate Species Richness",ylab="TLNP Species Richness",ylim=c(-20,10), xlim=c(-6,4))
+text(-6,9,labels = "a")
+
+avPlots(lm(rCAR ~ ecoregion+rPRI ,data=df_figure),grid=FALSE,id=FALSE, terms = "rPRI",xlab="Primate Species Richness",ylab="Carnivoran Species Richness",ylim=c(-3,2), xlim=c(-6,4))
+text(-6,2,labels = "b")
+
+avPlots(lm(rAFR ~ ecoregion+rPRI ,data=df_figure),grid=FALSE,id=FALSE, terms = "rPRI",xlab="Primate Species Richness",ylab="Afrosoricid Species Richness",ylim=c(-6,4), xlim=c(-6,4))
+text(-6,4,labels = "c")
+
+avPlots(lm(rROD ~ ecoregion+rPRI ,data=df_figure),grid=FALSE,id=FALSE, terms = "rPRI",xlab="Primate Species Richness",ylab="Rodent Species Richness",ylim=c(-6,6), xlim=c(-6,4))
+text(-6,6,labels = "d")
+```
+
+After looking at the Figures, I found that Figure 2a was still not what the authors had come up with. After some searching, I discovered that they had included Analevelona into their analysis just for Figure 2a, but not Figure 2 b-d. What I have done is rerun the analysis by including Analevelona when making Figure 2a, and then I omit it in order to run plots b-d properly. The end result are 4 graphs that match those in the study.
+
+####REDOING FIGURE 2 to include Analevelona data in Fig 2a (TLNP vs Primate)
+```{r Ana add for fig2a, echo=FALSE}
+Figure2_values<- TABLE1
+Figure2_values
+df_figure<- as.data.frame(Figure2_values)
+df_figure<-df_figure[-c(6,11,17,25,39),]
+df_figure<- cbind(df_figure, ecoregion=c("Spiny Thicket","Spiny Thicket","Spiny Thicket","Spiny Thicket","Spiny Thicket","Succulent Woodland","Succulent Woodland","Succulent Woodland","Succulent Woodland","Dry Deciduous Forest","Dry Deciduous Forest","Dry Deciduous Forest","Dry Deciduous Forest","Dry Deciduous Forest","Humid Forest","Humid Forest","Humid Forest","Humid Forest","Humid Forest","Humid Forest","Humid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest","Subhumid Forest"))
+df_figure[1,1]<-4
+df_figure[4,1]<-7
+df_figure[11,1]<-8
+df_figure
+```
 
 
-#For the Subhumid forest measures, the author and I came up with the same values for rPRI, rCAR, rAFR, rROD, and rTLNP, but different means
+```{r updated fig2a}
+par(mfrow=c(2,2))
+avPlots(lm(rTLNP ~ ecoregion+rPRI ,data=df_figure),grid=FALSE,id=FALSE, terms = "rPRI",xlab="Primate Species Richness",ylab="TLNP Species Richness",ylim=c(-20,10), xlim=c(-6,4))
+text(-6,9,labels = "a")
+
+df_figure<-df_figure[-c(34),] #I am now omitting Analevelona in order to put together a final Figure 2 with each graph as it appears in the study
+
+avPlots(lm(rCAR ~ ecoregion+rPRI ,data=df_figure),grid=FALSE,id=FALSE, terms = "rPRI",xlab="Primate Species Richness",ylab="Carnivoran Species Richness",ylim=c(-3,2), xlim=c(-6,4))
+text(-6,2,labels = "b")
+
+avPlots(lm(rAFR ~ ecoregion+rPRI ,data=df_figure),grid=FALSE,id=FALSE, terms = "rPRI",xlab="Primate Species Richness",ylab="Afrosoricid Species Richness",ylim=c(-6,4), xlim=c(-6,4))
+text(-6,4,labels = "c")
+
+avPlots(lm(rROD ~ ecoregion+rPRI ,data=df_figure),grid=FALSE,id=FALSE, terms = "rPRI",xlab="Primate Species Richness",ylab="Rodent Species Richness",ylim=c(-6,6), xlim=c(-6,4))
+text(-6,6,labels = "d")
+```
+
+
+Image figure 2
