@@ -409,6 +409,7 @@ text(-6,6,labels = "d")
 
 After looking at the Figures, I found that Figure 2a was still not what the authors had come up with. After some searching, I discovered that they had included Analevelona into their analysis just for Figure 2a, but not Figure 2 b-d. What I have done is rerun the analysis by including Analevelona when making Figure 2a, and then I omit it in order to run plots b-d properly. The end result are 4 graphs that match those in the study.
 
+
 ####REDOING FIGURE 2 to include Analevelona data in Fig 2a (TLNP vs Primate)
 ```{r Ana add for fig2a, echo=FALSE}
 Figure2_values<- TABLE1
