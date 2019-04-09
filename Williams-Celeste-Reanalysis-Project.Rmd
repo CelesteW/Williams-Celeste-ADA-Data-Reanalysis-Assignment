@@ -30,11 +30,11 @@ This paper aims to show how affective a more widely studied species like Primate
 This study performed various statistical analyses. For the descriptive statistical analysis I replicated Table 1 where the mean was found for each species group (PRI-Primate, CAR-Carnivore, AFR-Afrosoricid, ROD-Rodent, TLNP-Total non-primate) in the 5 different ecoregions (Spiny Thicket, Succulent Woodland, Dry Deciduous Forest, Humid Forest, Subhumid Forest) from "Table A". For the inferential statistical analysis I replicated Table 2 where a Multiple Linear Regression was performed to determine how well the species richness of Primates could predict other species richness. In this linear regression, the other predictor variable was ecoregion, a categorical variable, which had to be dummy-coded. For the visualization I replicated Figure 2, including 4 partial regression plots of species richness on primate species richness. 
 
 
-```{r fileA}
+```{r filea}
 library(readxl)
 f <- "~/Desktop/Species_Richness_Data.xlsx"
-A <- read_excel(f, sheet = 1, col_names = TRUE)
-head(A)
+a <- read_excel(f, sheet = 1, col_names = TRUE)
+head(a)
 ```
 
 I had to go back to the excel sheet and and delete the first 3 rows (blank + ecoregion label) because R was reading the column names as numbers causing issues with subsetting specific data. Even when I jsut deleted the top two blank rows, R kept assigning numbers to the end of each ecoregion, continuing to make it unable for me to subset easily. This is the data without the three blank rows I used.
