@@ -1,0 +1,186 @@
+---
+title: "Williams-Celeste-Data-Reanalysis-Assignment"
+author: "C. Williams"
+date: "4/9/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	warning = TRUE,
+	message = TRUE,
+	comment = "##",
+	prompt = FALSE,
+	tidy = TRUE,
+	tidy.opts = list(blank = FALSE, width.cutoff = 75),
+	fig.path = "img/",
+	fig.align = "center"
+)
+```
+
+##Replication of Analyses From *Primates as Predictors of Mammal Community Diversity in the Forest Ecosystems of Madagascar*
+
+## Introduction
+
+[Include a summary of the paper you are reanalyzing data from]
+
+## Visualization of Data
+
+[Include a view of the first few lines of the data set plus exploratory data analysis - overview of descriptive statistics included in the paper, plots, etc.
+
+```{r fileA}
+library(readxl)
+f <- "~/Desktop/TableA.xlsx"
+A <- read_excel(f, sheet = 1, col_names = TRUE)
+head(A)
+```
+
+## Replications/Reanalysis
+
+The first analyses to be done was replicating Table 1:Species richness (r) and complementarity (c) per mammal community
+```{r library}
+library(tidyr)
+library(tidyverse)
+library(dplyr)
+library(readr)
+library(knitr)
+library(formatR)
+```
+
+#####Spiny Thicket
+```{r Table_1_spiny}
+rPRI<- A[1:73,c(8:11,36)]
+rPRI<-colSums(rPRI)
+as.data.frame(rPRI)
+rCAR<- A[76:87,c(8:11,36)]
+rCAR<-colSums(rCAR)
+as.data.frame(rCAR)
+rAFR<- A[90:120,c(8:11,36)]
+rAFR<-colSums(rAFR)
+as.data.frame(rAFR)
+rROD<- A[123:146,c(8:11,36)]
+rROD<-colSums(rROD)
+as.data.frame(rROD)
+rTLNP<- A[c(76:87,90:120,123:146),c(8:11,36)]
+rTLNP<-colSums(rTLNP)
+as.data.frame(rTLNP)
+SP<- cbind(rPRI,rCAR,rAFR,rROD,rTLNP)
+mean_spiny_thicket<-colMeans(SP)
+SP<- rbind(SP,mean_spiny_thicket)
+SP<- rbind(SP)
+```
+
+#####SUCCULENT WOODLAND
+```{r Table_1_succ}
+rPRI<- A[1:73,c(6:7,33:34)]
+rPRI<-colSums(rPRI)
+as.data.frame(rPRI)
+rCAR<- A[76:87,c(6:7,33:34)]
+rCAR<-colSums(rCAR)
+as.data.frame(rCAR)
+rAFR<- A[90:120,c(6:7,33:34)]
+rAFR<-colSums(rAFR)
+as.data.frame(rAFR)
+rROD<- A[123:146,c(6:7,33:34)]
+rROD<-colSums(rROD)
+as.data.frame(rROD)
+rTLNP<- A[c(76:87,90:120,123:146),c(6:7,33:34)]
+rTLNP<-colSums(rTLNP)
+as.data.frame(rTLNP)
+SUC<- cbind(rPRI,rCAR,rAFR,rROD,rTLNP)
+mean_succulent_woodland<-colMeans(SUC)
+SUC<- rbind(SUC,mean_succulent_woodland)
+TABLE1<- rbind(SP,SUC)
+```
+
+#####DRY DECIDUOUS FOREST
+```{r Table_1_dry}
+rPRI<- A[1:73,c(2:5,31)]
+rPRI<-colSums(rPRI)
+as.data.frame(rPRI)
+rCAR<- A[76:87,c(2:5,31)]
+rCAR<-colSums(rCAR)
+as.data.frame(rCAR)
+rAFR<- A[90:120,c(2:5,31)]
+rAFR<-colSums(rAFR)
+as.data.frame(rAFR)
+rROD<- A[123:146,c(2:5,31)]
+rROD<-colSums(rROD)
+as.data.frame(rROD)
+rTLNP<- A[c(76:87,90:120,123:146),c(2:5,31)]
+rTLNP<-colSums(rTLNP)
+as.data.frame(rTLNP)
+DRY<- cbind(rPRI,rCAR,rAFR,rROD,rTLNP)
+mean_dry_deciduous_forest<-colMeans(DRY)
+DRY<- rbind(DRY,mean_dry_deciduous_forest)
+TABLE1<-rbind(SP,SUC,DRY)
+```
+
+#####HUMID FOREST
+```{r Table_1_humid}
+rPRI<- A[1:73,c(24:30)]
+rPRI<-colSums(rPRI)
+as.data.frame(rPRI)
+rCAR<- A[76:87,c(24:30)]
+rCAR<-colSums(rCAR)
+as.data.frame(rCAR)
+rAFR<- A[90:120,c(24:30)]
+rAFR<-colSums(rAFR)
+as.data.frame(rAFR)
+rROD<- A[123:146,c(24:30)]
+rROD<-colSums(rROD)
+as.data.frame(rROD)
+rTLNP<- A[c(76:87,90:120,123:146),c(24:30)]
+rTLNP<-colSums(rTLNP)
+as.data.frame(rTLNP)
+HUM<- cbind(rPRI,rCAR,rAFR,rROD,rTLNP)
+mean_humid_forest<-colMeans(HUM)
+HUM<- rbind(HUM,mean_humid_forest)
+TABLE1<- rbind(SP,SUC,DRY,HUM)
+```
+
+#####SUBHUMID FOREST
+```{r Table_1_subhumid}
+rPRI<- A[1:73,c(12:23,35)]
+rPRI<-colSums(rPRI)
+as.data.frame(rPRI)
+rCAR<- A[76:87,c(12:23,35)]
+rCAR<-colSums(rCAR)
+as.data.frame(rCAR)
+rAFR<- A[90:120,c(12:23,35)]
+rAFR<-colSums(rAFR)
+as.data.frame(rAFR)
+rROD<- A[123:146,c(12:23,35)]
+rROD<-colSums(rROD)
+as.data.frame(rROD)
+rTLNP<- A[c(76:87,90:120,123:146),c(12:23,35)]
+rTLNP<-colSums(rTLNP)
+as.data.frame(rTLNP)
+SUB<- cbind(rPRI,rCAR,rAFR,rROD,rTLNP)
+mean_subhumid_forest<-colMeans(SUB)
+SUB<- rbind(SUB,mean_subhumid_forest)
+TABLE1<- rbind(SP,SUC,DRY,HUM,SUB)
+TABLE1<-as.data.frame(TABLE1)
+```
+
+####Final Table 1
+```{r Table_1_final}
+TABLE1
+```
+
+####Table 1 from Study
+
+```{r image1}
+img src="img/Table 1.PNG" width="200px"
+```
+
+
+
+
+
+
+
+
+
+#For the Subhumid forest measures, the author and I came up with the same values for rPRI, rCAR, rAFR, rROD, and rTLNP, but different means
