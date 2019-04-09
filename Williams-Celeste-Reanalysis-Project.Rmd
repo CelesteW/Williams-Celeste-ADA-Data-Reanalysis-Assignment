@@ -186,8 +186,7 @@ kable(TABLE1)
 ####Table 1 from Study
 
 
-![](img/Table 1.PNG)
-
+opts_knit$set(base.url='https://github.com/CelesteW/Williams-Celeste-ADA-Data-Reanalysis-Assignment/blob/master/img/Table1.PNG')
 
 
 A few discrepancies can be found when comparing my replication to the one in the study. First,for the Subhumid forest measures, the authors and I came up with the same values for rPRI, rCAR, rAFR, rROD, and rTLNP, but different means. Second, for rTLNP Bemaraha I came up with 9 and they with 11, and with rTLNP Kirindy CFPF I came up with 12 and they 13. However, I continued to use the values I came up with throughout this project, and came up with the same results. Lastly, for rPRI Tsimanampetsotsa I reported 5 from the dataset, and they reported 4; for Andohahela Parcel 2 I reported 6 and they reported 7; for Ankarafantsika I reported 9 and they reported 8. I went back to the dataset and am still not sure how they came up with those values. Further in the report, you will see where I did have to change my values to the ones they reported in the study in order to get the appropriate statistical analyses run and figures made.
@@ -334,12 +333,12 @@ kable(TABLE2)
 ```
 
 ###Table 2 from study
-![](img/Table 2.png)
+opts_knit$set(base.url='https://github.com/CelesteW/Williams-Celeste-ADA-Data-Reanalysis-Assignment/blob/master/img/Table2.png')
 
 
 There was one slight discrepancy when comparing my replicated Table 2 to their Table 2. If you look at rCAR Block 2 DeltaF, you will see my reanalysis statistic was 8.0542 and there statistic was 8.504.
 
-
+<img src=img/Table 2.png width=200px/>
 
 ###FIGURE 2- Visualization
 
@@ -441,9 +440,8 @@ text(-6,6,labels = "d")
 ```
 
 ###Figure 2 from Study
-![](img/Figure 2.PNG)
 
-
+opts_knit$set(base.url='https://github.com/CelesteW/Williams-Celeste-ADA-Data-Reanalysis-Assignment/blob/master/img/Figure2.PNG')
 
 
 
