@@ -39,6 +39,7 @@ head(a)
 
 I had to go back to the excel sheet and and delete the first 3 rows (blank + ecoregion label) because R was reading the column names as numbers causing issues with subsetting specific data. Even when I jsut deleted the top two blank rows, R kept assigning numbers to the end of each ecoregion, continuing to make it unable for me to subset easily. This is the data without the three blank rows I used.
 
+
 ```{r fileA}
 library(readxl)
 f <- "~/Desktop/TableA.xlsx"
